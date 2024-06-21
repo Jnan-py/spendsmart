@@ -3,3 +3,4 @@ streamlit_option_menu
 yfinance
 prophet
 plotly
+numpy == 1.20
