@@ -6,3 +6,4 @@ prophet==1.1.3
 plotly==5.11.0
 requests>=2.31
 streamlit-option-menu==0.3.3
+altair==4.2.0  
