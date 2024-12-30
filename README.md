@@ -1,58 +1,74 @@
-Spend$mart - A Single Time Finance App
-Spend$mart is a full finance application that provides stock price predictions, information about specific stock tokens, the latest news related to finance, and an interactive interface for users to explore various financial data. This app uses advanced data sources, APIs, and machine learning models to provide reliable predictions and financial insights.
+# Spend$mart - A One-Stop Finance App
 
-Features
-Stock Price Prediction: Predicts future stock prices using the Prophet machine learning model. A user can input any stock token, choose a date range for historical data, and specify a future prediction date.
+## Overview
 
-Stock Token Information: Detailed information about a specific stock token including industry, sector, CEO, market capitalization, total revenue, and link to the official website.
+Spend$mart is a finance app built using **Streamlit**, designed to provide a seamless experience for users to:
 
-Latest News: It fetches the latest news related to finance based on keywords using the News API. Users can input any keyword, such as Bitcoin or the stock market, to get the most recent articles.
+- **Predict Future Stock Prices** using the power of machine learning (Prophet).
+- Get detailed **Information about Stocks** (including company profiles, revenue, market capitalization, etc.).
+- Stay updated with the latest **Finance News** from the most reliable sources.
+- View **Stock Market Trends and Analysis** for various stocks.
 
-Contact Us: A form where users can send a message to the app's creators via email.
+With Spend$mart, users can make smarter financial decisions with up-to-date data and forecasts.
 
-Tech Stack
-Frontend: Streamlit
-Backend: Python
-Data Source: Yahoo Finance API, News API
-Prediction Model: Prophet (for stock price prediction)
-Visualization: Plotly (for interactive graphs)
-Setup and Installation
-To set up the application locally, do the following:
+---
 
-Step 1: Clone the repository
+## Features
 
-bash
-Copy code
-git clone <repository_url>
-cd Spend$mart
-Step 2: Create a virtual environment (Optional but recommended)
+1. **Prediction**
+    - Users can enter a stock symbol (e.g., AAPL) and specify a date range to view historical stock prices.
+    - The app uses **Prophet** to predict future stock prices, allowing users to forecast the trend for a given period.
 
-bash
-Copy code
-python -m venv venv
-source venv/bin/activate # On Windows: venv\Scripts\activate
-Step 3: Install the required dependencies
+2. **Market Information**
+    - Get detailed information about individual stocks such as:
+      - Company Name
+      - Industry
+      - CEO
+      - Revenue
+      - Market Capitalization
+      - Website link for more information
+    - Users can view stock price graphs over a year-long period.
 
-bash
-Copy code
-pip install -r requirements.txt
-Step 4: Run the app
+3. **News**
+    - Provides the latest finance-related news using the **News API**.
+    - Users can search for news by entering a specific keyword (e.g., "bitcoin").
+    - Displays relevant articles with publication date, description, and image (if available).
 
-bash
-Copy code
-streamlit run app.py
-Step 5: Open your browser and go to:
-arduino
-Copy code
-http://localhost:8501
-Now, the app should be up and running.
+4. **Contact Us**
+    - A contact form to directly reach out for inquiries or feedback.
+    - Captures the user's name, email, and message.
 
-File Structure
+---
 
-bash
-Copy code
-Spend$mart/
-│
-├── app.py # Main Streamlit application code
-├── requirements.txt # List of required packages
-└── .gitignore # Git ignore file for the project
+## Installation
+
+1. **Clone the repository**:
+
+    ```bash
+    git clone https://github.com/your-username/spend-smart.git
+    cd spend-smart
+    ```
+
+2. **Install dependencies**:
+
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+3. **Run the app**:
+
+    ```bash
+    streamlit run app.py
+    ```
+
+---
+
+## Technologies Used
+
+- **Streamlit**: For building the user interface.
+- **yFinance**: To fetch stock data.
+- **Prophet**: For stock price prediction.
+- **Plotly**: For data visualization and stock price graph plotting.
+- **NewsAPI**: To fetch real-time finance news.
+- **Pandas**: For data manipulation and handling.
+
