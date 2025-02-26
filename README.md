@@ -45,8 +45,8 @@ With Spend$mart, users can make smarter financial decisions with up-to-date data
 1. **Clone the repository**:
 
     ```bash
-    git clone https://github.com/your-username/spend-smart.git
-    cd spend-smart
+    git clone https://github.com/Jnan-py/spendsmart.git
+    cd spendsmart
     ```
 
 2. **Install dependencies**:
@@ -58,7 +58,7 @@ With Spend$mart, users can make smarter financial decisions with up-to-date data
 3. **Run the app**:
 
     ```bash
-    streamlit run app.py
+    streamlit run spendsmart.py
     ```
 
 ---
