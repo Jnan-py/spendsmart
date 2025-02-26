@@ -8,15 +8,7 @@ from prophet.plot import plot_plotly
 from plotly import graph_objs as go
 import pandas as pd
 import requests
-# import wikipedia
 import urllib.parse
-
-# hide='''
-# <style>
-# #MainMenu {visibility: hidden;}
-# footer {visibility: hidden;}
-# </style>'''
-# st.markdown(hide,unsafe_allow_html=True)
 
 st.title("Spend$mart")
 select=option_menu(
@@ -38,7 +30,6 @@ if select == "Prediction":
         return data
 
     tkdata=yf.Ticker(symbol)
-    # tkdf=yf.download(symbol,start,end)
 
     stock=stock_data(symbol,start,end)
     st.header("Stock Data")
@@ -159,37 +150,10 @@ input[type=submit]:hover {
            
 if select=="Market":
 
-    # def get_link(query):
-    #     base_url = "https://en.wikipedia.org/wiki/"
-    #     encoded_query = urllib.parse.quote_plus(query.replace(" ", "_"))
-    #     return f"{base_url}{encoded_query}"
-
     st.title("Market")
     wt=st.selectbox("Select",('Stock Token','S&P 500'))
     if wt=='Stock Token':
         sym=st.text_input('Stock',"AAPL").upper()
-
-        # rqst=f"""https://query1.finance.yahoo.com/v10/finance/quoteSummary/{sym}?modules=assetProfile%2Cprice"""
-        # request=requests.get(f"{rqst}",headers={"USER-AGENT":"Mozilla/5.0"})
-        # json=request.json()
-        # data=json["quoteSummary"]["result"][0]
-
-        # st.header(f"About : {sym}")
-        # e=data['price']['longName']
-        # st.subheader(f"Name : {e}")
-        # b=data["assetProfile"]["sector"]
-        # st.subheader(f"Sector : {b}")
-        # c=data["assetProfile"]["industry"]
-        # st.subheader(f"Industry : {c}")
-        # d=data["price"]["marketCap"]['fmt']
-        # st.subheader(f"Market Capital : {d}")
-        # st.markdown((data['assetProfile']["website"]),unsafe_allow_html=True)
-        # with st.expander("About Company"):
-        #     st.write(data["assetProfile"]["longBusinessSummary"])
-
-        # resp = requests.get(get_link(sym))
-        # st.write(get_link(sym))
-
         resp = yf.Ticker(sym)
         info = resp.info
         name = info.get('longName')
@@ -213,7 +177,6 @@ if select=="Market":
         link_id = f"More Info about {sym}"
         button_code = f"<a href='{website}' target='_blank' style='display: inline-block; padding: 10px 20px; background-color: #1D77BF; color: white; text-align: center; text-decoration: none; margin: 4px 2px; cursor: pointer; border-radius: 10px;'>{link_id}</a>"
         st.markdown(button_code, unsafe_allow_html=True)
-        # st.write(info)
 
         start=datetime.datetime.today()-datetime.timedelta(days=3650)
         end=datetime.datetime.today()
