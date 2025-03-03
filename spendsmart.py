@@ -9,6 +9,11 @@ from plotly import graph_objs as go
 import pandas as pd
 import requests
 import urllib.parse
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+news_api = os.gentenv("NEWS_API")
 
 st.title("Spend$mart")
 select=option_menu(
@@ -70,7 +75,7 @@ if select == "Prediction":
 if select=='News':
     st.title("News")
     q=st.text_input("Enter the keyword :",value='bitcoin')
-    url=f'https://newsapi.org/v2/everything?q={q}&sortBy=publishedAt&apiKey=6f737b4068ca40e9b77eefc66b716478'
+    url=f'https://newsapi.org/v2/everything?q={q}&sortBy=publishedAt&apiKey={news_api}'
     r=requests.get(url)
     r=r.json()
     articles=r['articles']
