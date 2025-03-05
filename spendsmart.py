@@ -9,17 +9,15 @@ from plotly import graph_objs as go
 import pandas as pd
 import requests
 import urllib.parse
-from dotenv import load_dotenv
-import os
 
-load_dotenv()
-news_api = os.gentenv("NEWS_API")
+st.set_page_config(page_icon = ":🪙", page_title = "SpendSmart", layout = "wide")
 
 st.title("Spend$mart")
 select=option_menu(
     menu_title=None,
     options=['Market','Prediction','News','Contact Us'],orientation='horizontal'
         )
+
 if select == "Prediction":
     st.title('Prediction')
     symbol = st.text_input("Enter a stock token : ",value='AAPL')
@@ -37,6 +35,11 @@ if select == "Prediction":
     tkdata=yf.Ticker(symbol)
 
     stock=stock_data(symbol,start,end)
+    stock.reset_index(inplace = True)
+
+    cl = pd.DataFrame()
+    cl["Open"] = stock["Open"]
+    cl["Close"] = stock["Close"]
     st.header("Stock Data")
     st.write(stock)
     
@@ -45,8 +48,8 @@ if select == "Prediction":
   
     def plot_graph():
         fig=go.Figure()
-        fig.add_trace(go.Scatter(x=stock['Date'],y=stock['Open'],name="Stock Open Price"))
-        fig.add_trace(go.Scatter(x=stock['Date'],y=stock['Close'],name="Stock Close Price "))
+        fig.add_trace(go.Scatter(x=stock['Date'],y=cl['Open'],name="Stock Open Price"))
+        fig.add_trace(go.Scatter(x=stock['Date'],y=cl['Close'],name="Stock Close Price "))
         fig.layout.update(title_text="Stock Data Graph",xaxis_rangeslider_visible=True)
         fig.update_layout(xaxis_title="Price",yaxis_title="Date")        
         st.plotly_chart(fig)
@@ -75,7 +78,7 @@ if select == "Prediction":
 if select=='News':
     st.title("News")
     q=st.text_input("Enter the keyword :",value='bitcoin')
-    url=f'https://newsapi.org/v2/everything?q={q}&sortBy=publishedAt&apiKey={news_api}'
+    url=f'https://newsapi.org/v2/everything?q={q}&sortBy=publishedAt&apiKey=6f737b4068ca40e9b77eefc66b716478&language=en'
     r=requests.get(url)
     r=r.json()
     articles=r['articles']
@@ -92,7 +95,7 @@ if select=='News':
             st.write(article['description'])
             st.write(f"See More :  {article['url']}")
             try:
-                st.image(article['urlToImage'])
+                st.image(article['urlToImage'], width = 400)
             except AttributeError:
                 st.write("IMAGE IS NOT AVAILABLE")
             else:
@@ -154,83 +157,95 @@ input[type=submit]:hover {
     
            
 if select=="Market":
-
     st.title("Market")
     wt=st.selectbox("Select",('Stock Token','S&P 500'))
     if wt=='Stock Token':
         sym=st.text_input('Stock',"AAPL").upper()
-        resp = yf.Ticker(sym)
-        info = resp.info
-        name = info.get('longName')
-        country = info.get('country')
-        ceo = info.get('companyOfficers')[0]['name']
-        currency = info.get('currency')
-        summ = info.get('longBusinessSummary')
-        ind = info.get('industry')
-        website = info.get('website')
-        rev = info.get('totalRevenue')
+        
+        if sym:
+            resp = yf.Ticker(sym)
+            info = resp.info
+            name = info.get('longName')
+            country = info.get('country')
+            ceo = info.get('companyOfficers')[0]['name']
+            currency = info.get('currency')
+            summ = info.get('longBusinessSummary')
+            ind = info.get('industry')
+            website = info.get('website')
+            rev = info.get('totalRevenue')
 
-        st.subheader(name)
-        st.write(f'**Industry** : {ind}')
-        st.write(F'**Chief Executive Officer**: {ceo}')
-        st.write(f'**Country** : {country}')
-        st.write(f'**Currency** : {currency}')
-        st.write(f'**Total Revenue** : {rev}')
-        with st.expander('SUMMARY',expanded = False):
-            st.write(f'{summ}')
+            st.subheader(name)
+            st.write(f'**Industry** : {ind}')
+            st.write(F'**Chief Executive Officer**: {ceo}')
+            st.write(f'**Country** : {country}')
+            st.write(f'**Currency** : {currency}')
+            st.write(f'**Total Revenue** : {rev}')
+            with st.expander('SUMMARY',expanded = False):
+                st.write(f'{summ}')
 
-        link_id = f"More Info about {sym}"
-        button_code = f"<a href='{website}' target='_blank' style='display: inline-block; padding: 10px 20px; background-color: #1D77BF; color: white; text-align: center; text-decoration: none; margin: 4px 2px; cursor: pointer; border-radius: 10px;'>{link_id}</a>"
-        st.markdown(button_code, unsafe_allow_html=True)
+            link_id = f"More Info about {sym}"
+            button_code = f"<a href='{website}' target='_blank' style='display: inline-block; padding: 10px 20px; background-color: #1D77BF; color: white; text-align: center; text-decoration: none; margin: 4px 2px; cursor: pointer; border-radius: 10px;'>{link_id}</a>"
+            st.markdown(button_code, unsafe_allow_html=True)
 
-        start=datetime.datetime.today()-datetime.timedelta(days=3650)
-        end=datetime.datetime.today()
-        tkdata=yf.Ticker(sym)
-        tkdf=tkdata.history(period='1d',start=start,end=end)
-        def stock_data(symbol,start,end):
-            data=yf.download(symbol,start,end)
-            data.reset_index(inplace=True)
-            return data
-    
-        stock=stock_data(sym,start,end)
-        fig=go.Figure()
-        fig.add_trace(go.Scatter(x=stock['Date'],y=stock['Close']))
-        fig.update_layout(title=sym,xaxis_title="Price",yaxis_title="Date")
-        fig.layout.update(xaxis_rangeslider_visible=True)
-        st.subheader("Price Graph")
-        st.plotly_chart(fig)
-        st.subheader("Price Chart")
-        st.write(stock)
+            start=datetime.datetime.today()-datetime.timedelta(days=3650)
+            end=datetime.datetime.today()
+            tkdata=yf.Ticker(sym)
+            tkdf=tkdata.history(period='1d',start=start,end=end)
+            def stock_data(symbol,start,end):
+                data=yf.download(symbol,start,end)
+                data.reset_index(inplace=True)
+                return data
+        
+            stock=stock_data(sym,start,end)
+            stock.reset_index(inplace = True)
+
+            cld = pd.DataFrame()
+            cld['Close'] = stock['Close']
+            cld['Open'] = stock['Open']
+            cld = cld.fillna(method = "ffill")
+
+            fig=go.Figure()
+            fig.add_trace(go.Scatter(x=stock['Date'],y=cld['Close']))
+            fig.update_layout(title=sym,xaxis_title="Price",yaxis_title="Date")
+            fig.layout.update(xaxis_rangeslider_visible=True)
+            st.subheader("Price Graph")
+            st.plotly_chart(fig)
+            st.subheader("Price Chart")
+            st.write(stock)
 
     if wt=="S&P 500":
         st.header("S&P 500")
-        @st.cache_data
-        def load_data():
-            url='https://en.wikipedia.org/wiki/list_of_S%26P_500_companies'
-            html=pd.read_html(url,header=0)
-            df=html[0]
-            return df
-        df=load_data()
-        sector=df.groupby("GICS Sector")
+        try:
+            @st.cache_data
+            def load_data():
+                url='https://en.wikipedia.org/wiki/list_of_S%26P_500_companies'
+                html=pd.read_html(url,header=0)
+                df=html[0]
+                return df
+            df=load_data()
+            sector=df.groupby("GICS Sector")
 
-        sortsector = sorted(df['GICS Sector'].unique())
-        selectsector=st.multiselect("Sector",sortsector,sortsector)
+            sortsector = sorted(df['GICS Sector'].unique())
+            selectsector=st.multiselect("Sector",sortsector,sortsector)
 
-        df1=df[(df['GICS Sector'].isin(selectsector))]
+            df1=df[(df['GICS Sector'].isin(selectsector))]
 
-        st.write("Number of Companies for selected Categories : "+ str(df1.shape[0]))
-        st.dataframe(df1)
-        data=yf.download(tickers=list(df1[:10].Symbol),period = 'ytd',interval='1d',group_by = 'ticker',auto_adjust=True,prepost=True,threads=True,proxy=None)
-        def price_plot(symbol):
-            df=pd.DataFrame(data[symbol].Close)
-            df['Date']=df.index
-            fig=go.Figure()
-            fig.add_trace(go.Scatter(x=df.Date,y=df.Close,name="Stock Close Price "))
-            fig.layout.update(title_text=symbol,xaxis_rangeslider_visible=True)
-            fig.update_layout(xaxis_title="Date",yaxis_title="Price")        
-            st.plotly_chart(fig)
-        num=st.selectbox("Number of Company Graphs : ",(1,2,3,4,5,6,7,8,9,10))
-        if st.button('Graphs'):
-            st.subheader(f"Graphs of Top {num} Companies")
-            for i in list(df1.Symbol)[:num]:
-                price_plot(i)
+            st.write("Number of Companies for selected Categories : "+ str(df1.shape[0]))
+            st.dataframe(df1)
+            data=yf.download(tickers=list(df1[:10].Symbol),period = 'ytd',interval='1d',group_by = 'ticker',auto_adjust=True,prepost=True,threads=True,proxy=None)
+            def price_plot(symbol):
+                df=pd.DataFrame(data[symbol].Close)
+                df['Date']=df.index
+                fig=go.Figure()
+                fig.add_trace(go.Scatter(x=df.Date,y=df.Close,name="Stock Close Price "))
+                fig.layout.update(title_text=symbol,xaxis_rangeslider_visible=True)
+                fig.update_layout(xaxis_title="Date",yaxis_title="Price")        
+                st.plotly_chart(fig)
+            num=st.selectbox("Number of Company Graphs : ",(1,2,3,4,5,6,7,8,9,10))
+            if st.button('Graphs'):
+                st.subheader(f"Graphs of Top {num} Companies")
+                for i in list(df1.Symbol)[:num]:
+                    price_plot(i)
+        
+        except Exception as e:
+            st.warning("Please select the category")
